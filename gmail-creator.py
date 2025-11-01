@@ -38,34 +38,96 @@ def gmailAcc(user_agent):
 
     try:
         driver.get("https://www.gmail.com")
-
-        create_account_button = wait.until(EC.presence_of_element_located((By.XPATH, "//a[text()='Create account']")))
+        
+        # First Page
+        create_account_button = wait.until(EC.presence_of_element_located((By.XPATH, "//span[text()='Create account']")))
         create_account_button.click()
+        
+        time.sleep(1)
+        
+        personal_account_button = wait.until(EC.presence_of_element_located((By.XPATH, "//span[text()='For my personal use']")))
+        personal_account_button.click()
 
-        time.sleep(5)
+        time.sleep(3)
+        
+        # Second Page
+        
+        random_number = ''.join(random.choices('0123456789', k=4))
 
         first_name_text = random_string(8)
         last_name_text = random_string(10)
         username_text = random_string(10) + "12345"
         password_text = random_string(12) + "123"
+        Day = random.randint(1, 20)
+        Year = random.randint(2000, 2007)
+        email = first_name_text + last_name_text + random_number
+        
 
         first_name = wait.until(EC.element_to_be_clickable((By.ID, "firstName")))
         first_name.send_keys(first_name_text)
 
         last_name = driver.find_element(By.ID, "lastName")
         last_name.send_keys(last_name_text)
+        
+        next1_button = wait.until(EC.presence_of_element_located((By.XPATH, "//span[text()='Next']")))
+        next1_button.click()
+        
+        # Third Page
+        
+        time.sleep(3)
+        
+        month_dropdown = wait.until(EC.element_to_be_clickable((By.ID, "c3")))  # or use your element locator
+        driver.execute_script("arguments[0].click();", month_dropdown)
 
-        username = driver.find_element(By.ID, "username")
-        username.send_keys(username_text)
+        August_select = wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='August']")))
+        driver.execute_script("arguments[0].click();", August_select)
+
+        day_input = wait.until(EC.element_to_be_clickable((By.ID, "day")))
+        day_input.clear()
+        day_input.send_keys(str(Day))
+
+        year_input = driver.find_element(By.ID, "year")
+        year_input.clear()
+        year_input.send_keys(str(Year))
+
+        open_Gender_dropdown = wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='Gender']")))
+        driver.execute_script("arguments[0].click();", open_Gender_dropdown)
+        Select_Gender = wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='Male']")))
+        driver.execute_script("arguments[0].click();", Select_Gender)
+
+        
+        next2_button = wait.until(EC.presence_of_element_located((By.XPATH, "//span[text()='Next']")))
+        next2_button.click()
+        
+        # Fourth Page
+        time.sleep(3)
+        
+        custom_email = driver.find_element(By.XPATH, "//div[text()='Create your own Gmail address']") 
+        custom_email.click()
+
+        # Wait until the element is present and enabled for input
+        custom_email = wait.until(EC.element_to_be_clickable((By.NAME, "Username")))
+        # Clear any existing value and send the email text
+        custom_email.clear()
+        custom_email.send_keys(email)
+        
+        next3_button = wait.until(EC.presence_of_element_located((By.XPATH, "//span[text()='Next']")))
+        next3_button.click()
+        
+        # Fourth Page
+        time.sleep(3)
 
         password = driver.find_element(By.NAME, "Passwd")
         password.send_keys(password_text)
 
-        confirm_password = driver.find_element(By.NAME, "ConfirmPasswd")
+        confirm_password = driver.find_element(By.NAME, "PasswdAgain")
         confirm_password.send_keys(password_text)
 
-        next_button = driver.find_element(By.XPATH, "//div[@id='accountDetailsNext']/div/button")
-        next_button.click()
+        next4_button = wait.until(EC.presence_of_element_located((By.XPATH, "//span[text()='Next']")))
+        next4_button.click()
+        
+        # Fourth Page
+        time.sleep(3)
 
         wait.until(EC.presence_of_element_located((By.ID, "phoneNumberId")))
 
